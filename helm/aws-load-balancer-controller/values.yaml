@@ -320,3 +320,35 @@ clusterSecretsPermissions:
 # must be set to "triton-devops"; 
 # annotation validation error: 
 # missing key "meta.helm.sh/release-namespace": must be set to "triton-devops"
+
+export VPC_ID=$(aws eks describe-cluster \
+                --name triton-devops \
+                --query "cluster.resourcesVpcConfig.vpcId" \
+                --output text)
+
+helm upgrade -i aws-load-balancer-controller \
+    eks/aws-load-balancer-controller \
+    -n kube-system \
+    --set clusterName=triton-devops \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    --set image.tag=v2.4.2 \
+    --set region=ap-southeast-1 \
+    --set vpcId=vpc-09e9e72a300418af4 \
+    --version=1.4.1
+
+    helm upgrade -i aws-load-balancer-controller \
+    eks/aws-load-balancer-controller \
+    -n kube-system \
+    --set clusterName=eksworkshop-eksctl \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=aws-load-balancer-controller \
+    --set image.tag="${LBC_VERSION}" \
+    --set region=${AWS_REGION} \
+    --set vpcId=${VPC_ID} \
+    --version="${LBC_CHART_VERSION}"
+
+    eksctl utils associate-iam-oidc-provider \
+    --region ap-southeast-1 \
+    --cluster triton-devops \
+    --approve
