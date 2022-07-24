@@ -14,7 +14,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # The name of the Kubernetes cluster. A non-empty value is required
-clusterName:
+clusterName: triton-devops
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -23,7 +23,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name:
+  name: aws-load-balancer-controller
   # Automount API credentials for a Service Account.
   automountServiceAccountToken: true
   # List of image pull secrets to add to the Service Account.
@@ -132,7 +132,7 @@ ingressClassParams:
 createIngressClassResource: true
 
 # The AWS region for the kubernetes cluster. Set to use KIAM or kube2iam for example.
-region:
+region: ap-southeast-1
 
 # The VPC ID for the Kubernetes cluster. Set this manually when your pods are unable to use the metadata service to determine this automatically
 vpcId:
@@ -301,3 +301,22 @@ clusterSecretsPermissions:
   # allowAllSecrets allows the controller to access all secrets in the cluster.
   # This is to get backwards compatible behavior, but *NOT* recommended for security reasons
   allowAllSecrets: false
+
+
+
+#####
+#    helm upgrade --install --reuse-values --values values.yaml --namespace triton-devops --dependency-update triton-devops .
+
+
+# Error: UPGRADE FAILED: rendered manifests contain a resource that already exists. Unable to continue with update: 
+
+# MutatingWebhookConfiguration "aws-load-balancer-webhook" in namespace "" exists and cannot be imported into the current release: i
+# nvalid ownership metadata; 
+# label validation error: 
+# missing key "app.kubernetes.io/managed-by": 
+# must be set to "Helm"; 
+# annotation validation error: 
+# missing key "meta.helm.sh/release-name": 
+# must be set to "triton-devops"; 
+# annotation validation error: 
+# missing key "meta.helm.sh/release-namespace": must be set to "triton-devops"

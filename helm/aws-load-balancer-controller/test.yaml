@@ -14,7 +14,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # The name of the Kubernetes cluster. A non-empty value is required
-clusterName: test-cluster
+clusterName: triton-devops
 
 serviceAccount:
   # Specifies whether a service account should be created
